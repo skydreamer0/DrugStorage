@@ -14,7 +14,6 @@
 - 資料庫：MongoDB
 
 ## 快速開始
-
 1. 啟動前端：
    ```
    npm run dev

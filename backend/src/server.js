@@ -23,7 +23,6 @@ const DrugModel = mongoose.model('Drug', new mongoose.Schema({
   barcode: { type: String, required: true, unique: true },  // 條碼，必填且唯一
   location: { type: String, required: true }  // 存放位置，必填
 }));
-
 // 查詢所有藥品的 GET 路由
 app.get('/api/drugs', (req, res) => {
   DrugModel.find({})
@@ -34,7 +33,21 @@ app.get('/api/drugs', (req, res) => {
       res.status(500).send({ message: '查詢藥品時發生錯誤', error: err });
     });
 });
+// 查詢藥品存放位置的 GET 路由
+app.get('/api/get_location/:barcode', (req, res) => {
+  const { barcode } = req.params;
 
+  DrugModel.findOne({ barcode })
+    .then(drug => {
+      if (!drug) {
+        return res.status(404).send({ message: '找不到該條碼的藥品' });
+      }
+      res.send({ location: drug.location });
+    })
+    .catch(err => {
+      res.status(500).send({ message: '查詢藥品時發生錯誤', error: err });
+    });
+});
 // 新增單筆藥品的 POST 路由
 app.post('/api/add_drugs', (req, res) => {
   const { barcode, location } = req.body.drug;

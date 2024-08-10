@@ -1,5 +1,6 @@
 @echo off
 color 0A
+title PM2 應用程式管理工具
 
 echo ======================================
 echo        安裝和設置應用程式
@@ -17,6 +18,10 @@ IF %ERRORLEVEL% NEQ 0 (
 ) ELSE (
     echo Node.js 已安裝，繼續下一步。
 )
+
+echo.
+echo 正在安裝 PM2...
+npm install -g pm2
 
 echo.
 echo 正在檢查 MongoDB...
@@ -38,21 +43,93 @@ sc config MongoDB start= auto
 
 echo.
 echo 正在安裝應用程式的 npm 依賴項...
-pause
-cd /d C:\myapp
+
+:: 安裝根目錄的依賴項
 npm install
+
+:: 安裝前端依賴項
+cd frontend
+npm install
+cd ..
+
+:: 安裝後端依賴項
+cd backend
+npm install
+cd ..
 
 echo.
 echo ======================================
 echo        應用程式設置完成！
 echo ======================================
 
+:menu
+cls
+echo ======================================
+echo        PM2 應用程式管理工具
+echo ======================================
+echo.
+echo 選擇一個操作：
+echo 1. 啟動應用程式
+echo 2. 停止應用程式
+echo 3. 重啟應用程式
+echo 4. 檢視應用狀態
+echo 5. 退出
+echo.
+set /p choice=請選擇 [1-5]:
+
+if "%choice%"=="1" goto start_app
+if "%choice%"=="2" goto stop_app
+if "%choice%"=="3" goto restart_app
+if "%choice%"=="4" goto status_app
+if "%choice%"=="5" goto exit
+
+:start_app
+cls
+echo ======================================
+echo        啟動應用程式
+echo ======================================
 echo.
 echo 正在啟動應用程式...
-pm2 start server.js
+pm2 start ecosystem.config.js
+pause
+goto menu
 
-echo.
+:stop_app
+cls
 echo ======================================
-echo        所有步驟已完成！
+echo        停止應用程式
+echo ======================================
+echo.
+echo 正在停止應用程式...
+pm2 stop all
+pause
+goto menu
+
+:restart_app
+cls
+echo ======================================
+echo        重啟應用程式
+echo ======================================
+echo.
+echo 正在重啟應用程式...
+pm2 restart all
+pause
+goto menu
+
+:status_app
+cls
+echo ======================================
+echo        應用狀態
+echo ======================================
+echo.
+pm2 list
+pause
+goto menu
+
+:exit
+cls
+echo ======================================
+echo        已退出 PM2 管理工具
 echo ======================================
 pause
+exit

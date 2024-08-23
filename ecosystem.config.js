@@ -13,8 +13,9 @@ module.exports = {
       },
       {
         name: "frontend",       // 你的前端服務名稱
-        script: "npm",
-        args: "run dev --prefix frontend", // 用 npm 啟動前端
+        script: "npm",          // 指定要執行的命令為 npm
+        args: "run dev --prefix frontend", // 傳遞的參數
+        interpreter: "none",    // 告訴 PM2 不需要使用 Node.js 來解釋這個命令
         watch: true
       }
     ]

@@ -13,8 +13,10 @@ app.use(cors());  // 啟用跨來源資源共享
 app.use(bodyParser.json());  // 解析 JSON 格式的請求體
 app.use(bodyParser.urlencoded({ extended: true }));  // 解析 URL 編碼的請求體
 
-// 連接到 MongoDB 資料庫
-mongoose.connect('mongodb://localhost:27017/my_pharmacy_db')
+// 使用環境變數設定 MongoDB 連接字符串
+const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost:27017/my_pharmacy_db';
+mongoose.connect(mongoUrl, {
+})
   .then(() => console.log('MongoDB 連接成功'))
   .catch(err => console.error('MongoDB 連接錯誤:', err));
 

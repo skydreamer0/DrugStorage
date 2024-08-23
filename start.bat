@@ -19,9 +19,6 @@ IF %ERRORLEVEL% NEQ 0 (
     echo Node.js 已安裝，繼續下一步。
 )
 
-echo.
-echo 正在安裝 PM2...
-npm install -g pm2
 
 echo.
 echo 正在檢查 MongoDB...
